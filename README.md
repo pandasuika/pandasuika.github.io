@@ -1,2 +1,2 @@
 # pandasuika.github.io
-https://pandasuika.github.io/index
+https://pandasuika.github.io/
