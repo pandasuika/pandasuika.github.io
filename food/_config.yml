@@ -1,0 +1,5 @@
+$ mkdir themes
+$ cd themes
+$ git submodule add https://github.com/mrmierzejewski/hugo-theme-console.git hugo-theme-console
+
+theme = "hugo-theme-console"
