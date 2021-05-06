@@ -4,6 +4,10 @@
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+* {
+  box-sizing: border-box;
+}
+
 /* Style the body */
 body {
   font-family: Papyrus;
@@ -61,6 +65,45 @@ body {
 #Savoury {background-color: Cornsilk;}
 #Sweet {background-color: Cornsilk;}
 
+/* Add padding BETWEEN each column */
+.row,
+.row > .column {
+  padding: 8px;
+}
+
+/* Create four equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 25%;
+}
+
+/* Clear floats after rows */ 
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Content */
+.content {
+  background-color: white;
+  padding: 10px;
+}
+
+/* Responsive layout - makes a two column-layout instead of four columns */
+@media screen and (max-width: 900px) {
+  .column {
+    width: 50%;
+  }
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+}
+
 </style>
 
 <body>
@@ -75,8 +118,44 @@ body {
 <button class="tablink" onclick="openPage('Sweet', this, 'Cornsilk')">Sweet</button>
 
 <div id="Meat" class="tabcontent">
-  <h3>Meat</h3>
-  <p>Home is where the heart is..</p>
+  /* <h3>Meat</h3>
+  <p>Home is where the heart is..</p>*/
+  
+  <!-- Portfolio Gallery Grid -->
+  <div class="row">
+    <div class="column">
+      <div class="content">
+        <img src="https://pandasuika.github.io/img/Me-CarrotPork.jpg" alt="CarrotPork" style="width:100%">
+        <h3>胡萝卜炒肉</h3>
+        <p>胡萝卜片或胡萝卜丝和五花肉片或肉丝一起，美味。</p>
+      </div>
+    </div>
+	/*
+    <div class="column">
+      <div class="content">
+      <img src="/w3images/lights.jpg" alt="Lights" style="width:100%">
+        <h3>My Work</h3>
+        <p>Lorem ipsum dolor sit amet, tempor prodesset eos no. Temporibus necessitatibus sea ei, at tantas oporteat nam. Lorem ipsum dolor sit amet, tempor prodesset eos no.</p>
+      </div>
+    </div>
+    <div class="column">
+      <div class="content">
+      <img src="/w3images/nature.jpg" alt="Nature" style="width:100%">
+        <h3>My Work</h3>
+        <p>Lorem ipsum dolor sit amet, tempor prodesset eos no. Temporibus necessitatibus sea ei, at tantas oporteat nam. Lorem ipsum dolor sit amet, tempor prodesset eos no.</p>
+      </div>
+    </div>
+    <div class="column">
+      <div class="content">
+      <img src="/w3images/mountains.jpg" alt="Mountains" style="width:100%">
+        <h3>My Work</h3>
+        <p>Lorem ipsum dolor sit amet, tempor prodesset eos no. Temporibus necessitatibus sea ei, at tantas oporteat nam. Lorem ipsum dolor sit amet, tempor prodesset eos no.</p>
+      </div>
+    </div>
+	*/
+  </div>
+<!-- END GRID -->
+  
 </div>
 
 <div id="Veggie" class="tabcontent">
