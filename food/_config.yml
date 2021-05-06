@@ -3,3 +3,5 @@ $ cd themes
 $ git submodule add https://github.com/mrmierzejewski/hugo-theme-console.git hugo-theme-console
 
 theme = "hugo-theme-console"
+title: KiKiKitchen Menu ~ 小黄家常菜菜单
+description: by invitation only, reservation is required
