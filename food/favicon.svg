@@ -1,9 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="15 18 70 68">
-  <!-- smiling eyes (arched upward = happy squint) -->
-  <path d="M 27,36 Q 35,27 43,36" fill="none" stroke="#6b3a00" stroke-width="4" stroke-linecap="round"/>
-  <path d="M 57,36 Q 65,27 73,36" fill="none" stroke="#6b3a00" stroke-width="4" stroke-linecap="round"/>
-  <!-- pink tongue peeking from right bottom of mouth -->
-  <ellipse cx="64" cy="72" rx="11" ry="8" fill="#f06080" stroke="#6b3a00" stroke-width="2.5"/>
-  <!-- smiling mouth (no teeth) -->
-  <path d="M 28,58 Q 50,78 72,58" fill="none" stroke="#6b3a00" stroke-width="4" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 95">
+  <path d="M 50,82
+           C 15,62 3,47 3,30
+           C 3,13 16,3 30,3
+           C 39,3 46,8 50,15
+           C 54,8 61,3 70,3
+           C 84,3 97,13 97,30
+           C 97,47 85,62 50,82 Z"
+        fill="#D4AC0D"/>
 </svg>
