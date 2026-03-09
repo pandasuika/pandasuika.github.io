@@ -26,18 +26,42 @@
 
     /* Header */
     .header {
-      padding: 10px 20px;
+      padding: 40px 20px;
       text-align: center;
       background: #D4AC0D;
       color: white;
+      overflow: hidden;
+      transition: padding 0.3s ease;
     }
 
     .header h1 {
-      font-size: clamp(1rem, 3.5vw, 1.5rem);
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
       letter-spacing: 0.05em;
-      white-space: nowrap;
+      transition: font-size 0.3s ease;
+    }
+
+    .header p {
+      font-size: clamp(0.85rem, 2.5vw, 1rem);
+      opacity: 0.9;
+      margin-top: 8px;
+      max-height: 3em;
       overflow: hidden;
-      text-overflow: ellipsis;
+      transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+    }
+
+    /* Compact state when scrolled */
+    .topbar.scrolled .header {
+      padding: 8px 20px;
+    }
+
+    .topbar.scrolled .header h1 {
+      font-size: clamp(1rem, 3vw, 1.3rem);
+    }
+
+    .topbar.scrolled .header p {
+      max-height: 0;
+      opacity: 0;
+      margin-top: 0;
     }
 
     /* Tabs */
@@ -50,13 +74,13 @@
       background-color: #8fbc8f; /* DarkSeaGreen */
       color: #2c3e2d;
       border: none;
+      border-top: 3px solid transparent;
       outline: none;
       cursor: pointer;
       padding: 14px 8px;
       font-size: clamp(0.8rem, 2.5vw, 1rem);
       font-family: "Broadway", "Papyrus", serif;
       transition: background-color 0.2s, color 0.2s;
-      border-bottom: 3px solid transparent;
     }
 
     .tablink:hover {
@@ -66,7 +90,7 @@
     .tablink.active {
       background-color: #fffcf1;
       color: #6b4e00;
-      border-bottom: 3px solid #D4AC0D;
+      border-top: 3px solid #D4AC0D;
       font-weight: bold;
     }
 
@@ -141,6 +165,7 @@
 <div class="topbar">
 <div class="header">
   <h1>KiKiKitchen 黄黄小厨</h1>
+  <p>by invitation only &amp; reservation required</p>
 </div>
 
 <div class="tabs">
@@ -280,6 +305,11 @@
   }
 
   document.getElementById('defaultOpen').click();
+
+  const topbar = document.querySelector('.topbar');
+  window.addEventListener('scroll', () => {
+    topbar.classList.toggle('scrolled', window.scrollY > 10);
+  });
 </script>
 
 </body>
