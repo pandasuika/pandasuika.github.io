@@ -1,351 +1,280 @@
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-<title>KiKiKitchen ~ 黄黄小厨</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KiKiKitchen ~ 黄黄小厨</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Papyrus", "STShuTi", "YouYuan", fantasy, serif;
+      background: #f5f0e8;
+      color: #424949;
+    }
+
+    /* Header */
+    .header {
+      padding: 40px 20px;
+      text-align: center;
+      background: #D4AC0D;
+      color: white;
+    }
+
+    .header h1 {
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      font-size: clamp(0.85rem, 2.5vw, 1rem);
+      opacity: 0.9;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+    }
+
+    .tablink {
+      flex: 1;
+      background-color: #8fbc8f; /* DarkSeaGreen */
+      color: #2c3e2d;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 8px;
+      font-size: clamp(0.8rem, 2.5vw, 1rem);
+      font-family: "Broadway", "Papyrus", serif;
+      transition: background-color 0.2s, color 0.2s;
+      border-bottom: 3px solid transparent;
+    }
+
+    .tablink:hover {
+      background-color: #f5deb3; /* Wheat */
+    }
+
+    .tablink.active {
+      background-color: #fffcf1;
+      color: #6b4e00;
+      border-bottom: 3px solid #D4AC0D;
+      font-weight: bold;
+    }
+
+    /* Tab content */
+    .tabcontent {
+      display: none;
+      background-color: #fffcf1;
+      padding: 24px 16px;
+      min-height: 60vh;
+    }
+
+    .tabcontent.active {
+      display: block;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    /* Card */
+    .card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.13);
+    }
+
+    .card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-body {
+      padding: 12px 14px 16px;
+    }
+
+    .card-body h3 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+      color: #3d3000;
+    }
+
+    .card-body p {
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: #5a5a5a;
+      font-family: "STShuTi", "YouYuan", sans-serif;
+    }
+  </style>
 </head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-* {
-  box-sizing: border-box;
-}
-
-/* Style the body */
-body {
-  font-family: Papyrus;
-  margin: 0;
-}
-
-/* Header/Logo Title */
-.header {
-  padding: 60px;
-  text-align: center;
-  background: #D4AC0D;
-  color: white;
-  font-size: 30px;
-}
-
-/* Page Content */
-.content {padding:20px;}
-
-.h1 {
-  font-family: "Papyrus", FZShuti, YouYuan, STShuTi, Fantasy, Serif;
-}
-
-.p {
-  font-family: "Papyrus", Serif;
-}
-
-/* Style tab links */
-.tablink {
-  background-color: DarkSeaGreen;
-  color: #424949;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  font-size: 17px;
-  width: 25%;
-  font-family: "Broadway", Serif;
-}
-
-.tablink:hover {
-  background-color: Bisque;
-}
-
-/* Style the tab content (and add height:100% for full page content) */
-.tabcontent {
-  color: #424949;
-  display: none;
-  padding: 100px 20px;
-  height: 100%;
-}
-
-#Meat {background-color: Cornsilk;}
-#Veggie {background-color: Cornsilk;}
-#Savoury {background-color: Cornsilk;}
-#Sweet {background-color: Cornsilk;}
-
-/* Add padding BETWEEN each column */
-.row,
-.row > .column {
-  padding: 8px;
-}
-
-/* Create four equal columns that floats next to each other */
-.column {
-  float: left;
-  width: 25%;
-}
-
-/* Clear floats after rows */ 
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-/* Content */
-.content {
-  background-color: #FFFCF1;
-  padding: 10px;
-}
-
-/* Responsive layout - makes a two column-layout instead of four columns */
-@media screen and (max-width: 900px) {
-  .column {
-    width: 50%;
-  }
-}
-
-/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 600px) {
-  .column {
-    width: 100%;
-  }
-}
-
-</style>
-
 <body>
+
 <div class="header">
-  <h1 class="h1">KiKiKitchen 黄黄小厨</h1>
-  <p class="p">by invitation only & reservation required</p>
+  <h1>KiKiKitchen 黄黄小厨</h1>
+  <p>by invitation only &amp; reservation required</p>
 </div>
 
-<button class="tablink" onclick="openPage('Meat', this, 'Cornsilk')" id="defaultOpen">Meat</button>
-<button class="tablink" onclick="openPage('Veggie', this, 'Cornsilk')">Veggie</button>
-<button class="tablink" onclick="openPage('Savoury', this, 'Cornsilk')">Savoury</button>
-<button class="tablink" onclick="openPage('Sweet', this, 'Cornsilk')">Sweet</button>
+<div class="tabs">
+  <button class="tablink" onclick="openPage('Meat', this)" id="defaultOpen">Meat</button>
+  <button class="tablink" onclick="openPage('Veggie', this)">Veggie</button>
+  <button class="tablink" onclick="openPage('Savoury', this)">Savoury</button>
+  <button class="tablink" onclick="openPage('Sweet', this)">Sweet</button>
+</div>
 
 <div id="Meat" class="tabcontent">
-
-  <!-- Portfolio Gallery Grid -->
-  <div class="row">
-    <div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Me-CarrotPork.jpg" alt="CarrotPork" style="width:100%">
-        <h3>胡萝卜炒肉</h3>
-        <p>胡萝卜片或胡萝卜丝和五花肉片或肉丝一起炒熟，好吃不腻。</p>
-      </div>
+  <div class="grid">
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Me-CarrotPork.jpg" alt="胡萝卜炒肉" loading="lazy" decoding="async">
+      <div class="card-body"><h3>胡萝卜炒肉</h3><p>胡萝卜片或胡萝卜丝和五花肉片或肉丝一起炒熟，好吃不腻。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Me-MuerPork.jpg" alt="MuerPork" style="width:100%">
-        <h3>木耳炒肉</h3>
-        <p>炒肉系列之二，香辣口味。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Me-MuerPork.jpg" alt="木耳炒肉" loading="lazy" decoding="async">
+      <div class="card-body"><h3>木耳炒肉</h3><p>炒肉系列之二，香辣口味。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Me-TomatoBeef.jpg" alt="TomatoBeef" style="width:100%">
-        <h3>番茄牛腩</h3>
-        <p>看着很黑暗，其实特别好吃又下饭，偏甜口。电高压锅是个好东西。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Me-TomatoBeef.jpg" alt="番茄牛腩" loading="lazy" decoding="async">
+      <div class="card-body"><h3>番茄牛腩</h3><p>看着很黑暗，其实特别好吃又下饭，偏甜口。电高压锅是个好东西。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Me-BeefSlice.jpg" alt="BeefSlice" style="width:100%">
-        <h3>肥牛汤</h3>
-        <p>西红柿、金针菇、肥牛片，可酸可辣的汤，也可以换别的配料比如豆腐。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Me-BeefSlice.jpg" alt="肥牛汤" loading="lazy" decoding="async">
+      <div class="card-body"><h3>肥牛汤</h3><p>西红柿、金针菇、肥牛片，可酸可辣的汤，也可以换别的配料比如豆腐。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Me-ChickenSoup.jpg" alt="ChickenSoup" style="width:100%">
-        <h3>鸡汤</h3>
-        <p>去骨鸡腿肉，配料可自定义。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Me-ChickenSoup.jpg" alt="鸡汤" loading="lazy" decoding="async">
+      <div class="card-body"><h3>鸡汤</h3><p>去骨鸡腿肉，配料可自定义。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Me-CornPork.jpg" alt="CornPork" style="width:100%">
-        <h3>玉米排骨汤</h3>
-        <p>香甜的玉米，软嫩的排骨，再加上土豆和胡罗卜味道会更好。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Me-CornPork.jpg" alt="玉米排骨汤" loading="lazy" decoding="async">
+      <div class="card-body"><h3>玉米排骨汤</h3><p>香甜的玉米，软嫩的排骨，再加上土豆和胡萝卜味道会更好。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Me-PorkBelly.jpg" alt="PorkBelly" style="width:100%">
-        <h3>卤肉卤蛋</h3>
-        <p>王守义卤料版，口味会比较偏淡，但我自己觉得挺好吃的……可能还不够拿得出手。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Me-PorkBelly.jpg" alt="卤肉卤蛋" loading="lazy" decoding="async">
+      <div class="card-body"><h3>卤肉卤蛋</h3><p>王守义卤料版，口味会比较偏淡，但我自己觉得挺好吃的……可能还不够拿得出手。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Me-PorkRibs.jpg" alt="PorkRibs" style="width:100%">
-        <h3>红烧排骨</h3>
-        <p>可能有点费（不粘）锅，只做过一次，但应该还能重现。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Me-PorkRibs.jpg" alt="红烧排骨" loading="lazy" decoding="async">
+      <div class="card-body"><h3>红烧排骨</h3><p>可能有点费（不粘）锅，只做过一次，但应该还能重现。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Me-Prawn.jpg" alt="Prawn" style="width:100%">
-        <h3>意大利面</h3>
-        <p>一般会放虾或其他冷冻海鲜（带子、蟹棒等），应该没有人会想特意来我这儿吃这个吧哈哈。就给大家看看。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Me-Prawn.jpg" alt="意大利面" loading="lazy" decoding="async">
+      <div class="card-body"><h3>意大利面</h3><p>一般会放虾或其他冷冻海鲜（带子、蟹棒等），应该没有人会想特意来我这儿吃这个吧哈哈。就给大家看看。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Me-PrawnRice.jpg" alt="PrawnRice" style="width:100%">
-        <h3>炒饭</h3>
-        <p>有啥放啥，方便快捷又好吃。小黄炒饭一般饭比菜少。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Me-PrawnRice.jpg" alt="炒饭" loading="lazy" decoding="async">
+      <div class="card-body"><h3>炒饭</h3><p>有啥放啥，方便快捷又好吃。小黄炒饭一般饭比菜少。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Me-Squid.jpg" alt="Squid" style="width:100%">
-        <h3>炒鱿鱼圈</h3>
-        <p>感受一下炒鱿鱼的感觉……这个得看超市有没有卖处理好的鱿鱼圈。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Me-Squid.jpg" alt="炒鱿鱼圈" loading="lazy" decoding="async">
+      <div class="card-body"><h3>炒鱿鱼圈</h3><p>感受一下炒鱿鱼的感觉……这个得看超市有没有卖处理好的鱿鱼圈。</p></div>
     </div>
-	
   </div>
-<!-- END GRID -->
-  
 </div>
 
 <div id="Veggie" class="tabcontent">
-
-  <!-- Portfolio Gallery Grid -->
-  <div class="row">
-    <div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Ve-Cabbage.jpg" alt="Cabbage" style="width:100%">
-        <h3>炒白菜</h3>
-        <p>蒜炒白菜，加一点儿火腿肠，再来一点儿剁辣椒，不好吃才怪(～￣▽￣)～。</p>
-      </div>
+  <div class="grid">
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Ve-Cabbage.jpg" alt="炒白菜" loading="lazy" decoding="async">
+      <div class="card-body"><h3>炒白菜</h3><p>蒜炒白菜，加一点儿火腿肠，再来一点儿剁辣椒，不好吃才怪(～￣▽￣)～。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Ve-Enoki.jpg" alt="Enoki" style="width:100%">
-        <h3>烤金针菇</h3>
-        <p>烤箱也是个好东西。蒜末和小米椒加上一点点油就可以非常美味了。不能吃辣可以减少或者不放小米椒，可以替换成剁辣椒或者完全不放辣椒。最后补一点青葱，颜色就更丰富了。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Ve-Enoki.jpg" alt="烤金针菇" loading="lazy" decoding="async">
+      <div class="card-body"><h3>烤金针菇</h3><p>烤箱也是个好东西。蒜末和小米椒加上一点点油就可以非常美味了。不能吃辣可以减少或者不放小米椒。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Ve-Eggplant.jpg" alt="Eggplant" style="width:100%">
-        <h3>烤茄子</h3>
-        <p>烤箱还是个好东西。蒜末和小米椒加上一点点油就可以非常美味了。不能吃辣可以减少或者不放小米椒，可以替换成剁辣椒或者完全不放辣椒。最后补一点青葱，颜色就更丰富了。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Ve-Eggplant.jpg" alt="烤茄子" loading="lazy" decoding="async">
+      <div class="card-body"><h3>烤茄子</h3><p>烤箱还是个好东西。蒜末和小米椒加上一点点油就可以非常美味了。最后补一点青葱，颜色就更丰富了。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Ve-Beancurd.jpg" alt="Beancurd" style="width:100%">
-        <h3>韭菜香干</h3>
-        <p>其实我会把这个当荤菜的，但是又不太好意思。用五花肉炸出猪油，炒香干加韭菜，有那么点儿湘菜的意思。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Ve-Beancurd.jpg" alt="韭菜香干" loading="lazy" decoding="async">
+      <div class="card-body"><h3>韭菜香干</h3><p>用五花肉炸出猪油，炒香干加韭菜，有那么点儿湘菜的意思。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Ve-Cauliflower.jpg" alt="Cauliflower" style="width:100%">
-        <h3>花菜（炒肉）</h3>
-        <p>其实我会把这个当荤菜的，但是又不太好意思之二。用五花肉炸出猪油，炒花菜，有那么点儿湘菜的意思。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Ve-Cauliflower.jpg" alt="花菜炒肉" loading="lazy" decoding="async">
+      <div class="card-body"><h3>花菜（炒肉）</h3><p>用五花肉炸出猪油，炒花菜，有那么点儿湘菜的意思。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Ve-TomatoEgg.jpg" alt="TomatoEgg" style="width:100%">
-        <h3>西红柿炒蛋</h3>
-        <p>咸口，不放糖不放番茄酱，甚至可能会放花椒油哈哈。偶尔放虾。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Ve-TomatoEgg.jpg" alt="西红柿炒蛋" loading="lazy" decoding="async">
+      <div class="card-body"><h3>西红柿炒蛋</h3><p>咸口，不放糖不放番茄酱，甚至可能会放花椒油哈哈。偶尔放虾。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Ve-BrocolliSoup.jpg" alt="BrocolliSoup" style="width:100%">
-        <h3>西兰花豆腐虾仁汤</h3>
-        <p>其实我会把这个当荤菜的，但是又不太好意思之三。西兰花也可以蒜蓉炒或者清水煮了撒点儿黑胡椒。豆腐还有韩式辣豆腐汤。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Ve-BrocolliSoup.jpg" alt="西兰花豆腐虾仁汤" loading="lazy" decoding="async">
+      <div class="card-body"><h3>西兰花豆腐虾仁汤</h3><p>西兰花也可以蒜蓉炒或者清水煮了撒点儿黑胡椒。豆腐还有韩式辣豆腐汤。</p></div>
     </div>
-	
   </div>
-<!-- END GRID -->
 </div>
 
 <div id="Savoury" class="tabcontent">
-
-  <!-- Portfolio Gallery Grid -->
-  <div class="row">
-    <div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Sa-Shaomai.jpg" alt="Shaomai" style="width:100%">
-        <h3>烧卖</h3>
-        <p>湖南风味，香菇、五花肉、糯米为主要馅料，猪油、酱油、胡椒粉也是必不可少的。烧卖皮是从日本超市Meidi-ya买的大饺子皮，蒸后晶莹剔透。</p>
-      </div>
+  <div class="grid">
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Sa-Shaomai.jpg" alt="烧卖" loading="lazy" decoding="async">
+      <div class="card-body"><h3>烧卖</h3><p>湖南风味，香菇、五花肉、糯米为主要馅料，猪油、酱油、胡椒粉也是必不可少的。烧卖皮是从日本超市Meidi-ya买的大饺子皮，蒸后晶莹剔透。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Sa-FlossBread.jpg" alt="FlossBread" style="width:100%">
-        <h3>肉松面包</h3>
-        <p>小面包烤好后，从中间切开一条缝，挤上蛋黄酱，撒上满满的肉松，好吃的。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Sa-FlossBread.jpg" alt="肉松面包" loading="lazy" decoding="async">
+      <div class="card-body"><h3>肉松面包</h3><p>小面包烤好后，从中间切开一条缝，挤上蛋黄酱，撒上满满的肉松，好吃的。</p></div>
     </div>
-	
   </div>
-<!-- END GRID -->
 </div>
 
 <div id="Sweet" class="tabcontent">
-
-  <!-- Portfolio Gallery Grid -->
-  <div class="row">
-    <div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Sw-RedBeanBun.jpg" alt="RBBun" style="width:100%">
-        <h3>豆沙面包</h3>
-        <p>好评如潮！好吃得停不下来！不过每个挺小的，豆沙份量倒是很足。</p>
-      </div>
+  <div class="grid">
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Sw-RedBeanBun.jpg" alt="豆沙面包" loading="lazy" decoding="async">
+      <div class="card-body"><h3>豆沙面包</h3><p>好评如潮！好吃得停不下来！不过每个挺小的，豆沙份量倒是很足。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Sw-Cake.jpg" alt="Cake" style="width:100%">
-        <h3>奶油蛋糕</h3>
-        <p>至今卖相还是很惨烈但是好评不断的奶油夹层蛋糕。有好吃的草莓的时候也许会更好吃。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Sw-Cake.jpg" alt="奶油蛋糕" loading="lazy" decoding="async">
+      <div class="card-body"><h3>奶油蛋糕</h3><p>至今卖相还是很惨烈但是好评不断的奶油夹层蛋糕。有好吃的草莓的时候也许会更好吃。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Sw-CakeRoll.jpg" alt="CakeRoll" style="width:100%">
-        <h3>蛋糕卷</h3>
-        <p>其实也是奶油蛋糕。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Sw-CakeRoll.jpg" alt="蛋糕卷" loading="lazy" decoding="async">
+      <div class="card-body"><h3>蛋糕卷</h3><p>其实也是奶油蛋糕。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Sw-Pancake.jpg" alt="Pancake" style="width:100%">
-        <h3>松饼</h3>
-        <p>其实也是奶油蛋糕之二。不过不是用烤箱烤的了，至今没有做成功日式松软的松饼，不过也还好吃。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Sw-Pancake.jpg" alt="松饼" loading="lazy" decoding="async">
+      <div class="card-body"><h3>松饼</h3><p>其实也是奶油蛋糕之二。不过不是用烤箱烤的了，至今没有做成功日式松软的松饼，不过也还好吃。</p></div>
     </div>
-	<div class="column">
-      <div class="content">
-        <img src="https://pandasuika.github.io/img/Sw-Tianjiu.jpg" alt="Tianjiu" style="width:100%">
-        <h3>酒酿小圆子</h3>
-        <p>还可以做成甜酒冲蛋。</p>
-      </div>
+    <div class="card">
+      <img src="https://pandasuika.github.io/img/Sw-Tianjiu.jpg" alt="酒酿小圆子" loading="lazy" decoding="async">
+      <div class="card-body"><h3>酒酿小圆子</h3><p>还可以做成甜酒冲蛋。</p></div>
     </div>
-	
   </div>
-<!-- END GRID -->
 </div>
 
 <script>
-function openPage(pageName,elmnt,color) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
+  function openPage(pageName, btn) {
+    document.querySelectorAll('.tabcontent').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tablink').forEach(el => el.classList.remove('active'));
+    document.getElementById(pageName).classList.add('active');
+    btn.classList.add('active');
   }
-  tablinks = document.getElementsByClassName("tablink");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].style.backgroundColor = "";
-  }
-  document.getElementById(pageName).style.display = "block";
-  elmnt.style.backgroundColor = color;
-}
 
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
+  document.getElementById('defaultOpen').click();
 </script>
 
 </body>
