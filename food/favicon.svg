@@ -1,10 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <!-- gold circle background -->
-  <circle cx="50" cy="50" r="50" fill="#D4AC0D"/>
-  <!-- white teeth area -->
-  <path d="M 20,48 Q 50,42 80,48 Q 80,70 50,74 Q 20,70 20,48 Z" fill="white"/>
-  <!-- pink tongue -->
-  <ellipse cx="50" cy="67" rx="17" ry="11" fill="#f06080"/>
-  <!-- mouth outline -->
-  <path d="M 20,48 Q 50,42 80,48 Q 80,70 50,74 Q 20,70 20,48 Z" fill="none" stroke="#6b3a00" stroke-width="3" stroke-linejoin="round"/>
+  <!-- smiling eyes (arched upward = happy squint) -->
+  <path d="M 27,36 Q 35,27 43,36" fill="none" stroke="#6b3a00" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 57,36 Q 65,27 73,36" fill="none" stroke="#6b3a00" stroke-width="4" stroke-linecap="round"/>
+  <!-- pink tongue peeking from right bottom of mouth -->
+  <ellipse cx="64" cy="72" rx="11" ry="8" fill="#f06080" stroke="#6b3a00" stroke-width="2.5"/>
+  <!-- smiling mouth (no teeth) -->
+  <path d="M 28,58 Q 50,78 72,58" fill="none" stroke="#6b3a00" stroke-width="4" stroke-linecap="round"/>
 </svg>
