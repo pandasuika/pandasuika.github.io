@@ -17,23 +17,27 @@
       color: #424949;
     }
 
+    /* Sticky top bar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
     /* Header */
     .header {
-      padding: 40px 20px;
+      padding: 10px 20px;
       text-align: center;
       background: #D4AC0D;
       color: white;
     }
 
     .header h1 {
-      font-size: clamp(1.6rem, 5vw, 2.4rem);
+      font-size: clamp(1rem, 3.5vw, 1.5rem);
       letter-spacing: 0.05em;
-      margin-bottom: 8px;
-    }
-
-    .header p {
-      font-size: clamp(0.85rem, 2.5vw, 1rem);
-      opacity: 0.9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* Tabs */
@@ -134,9 +138,9 @@
 </head>
 <body>
 
+<div class="topbar">
 <div class="header">
   <h1>KiKiKitchen 黄黄小厨</h1>
-  <p>by invitation only &amp; reservation required</p>
 </div>
 
 <div class="tabs">
@@ -145,6 +149,7 @@
   <button class="tablink" onclick="openPage('Savoury', this)">Savoury</button>
   <button class="tablink" onclick="openPage('Sweet', this)">Sweet</button>
 </div>
+</div><!-- end topbar -->
 
 <div id="Meat" class="tabcontent">
   <div class="grid">
