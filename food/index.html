@@ -216,7 +216,7 @@
     var count = getRatingCount(name);
     var scoreEl = container.querySelector('.avg-score');
     if (scoreEl) {
-      scoreEl.textContent = count > 0 ? avg.toFixed(1) : '-';
+      scoreEl.textContent = count > 0 ? avg.toFixed(1) + ' (' + count + ')' : '-';
     }
 
     container.querySelectorAll('.star-pos').forEach(function(pos) {
