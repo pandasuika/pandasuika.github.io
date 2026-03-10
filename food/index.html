@@ -32,17 +32,50 @@
     .card-body h3 { font-size: 1rem; margin-bottom: 6px; color: #3d3000; }
     .card-body p { font-size: 0.82rem; line-height: 1.55; color: #5a5a5a; font-family: "STShuTi", "YouYuan", sans-serif; }
 
-    /* Star rating */
-    .card-stars { display: flex; gap: 3px; margin: 5px 0 8px; }
-    .star { cursor: pointer; font-size: 1.15rem; color: #ddd; transition: color 0.12s, transform 0.12s; line-height: 1; user-select: none; }
-    .star.filled { color: #D4AC0D; }
-    .star.hovered { color: #f0c830; transform: scale(1.2); }
-
-    /* Undo / Redo floating controls */
-    .history-controls { position: fixed; bottom: 24px; right: 24px; display: flex; gap: 8px; z-index: 200; }
-    .history-btn { background: #8fbc8f; color: #2c3e2d; border: none; border-radius: 8px; padding: 9px 16px; font-size: 0.85rem; font-family: "Papyrus", serif; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.18); transition: background 0.2s, opacity 0.2s, transform 0.15s; }
-    .history-btn:hover:not(:disabled) { background: #f5deb3; transform: translateY(-2px); }
-    .history-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+    /* ── Star rating ── */
+    .card-stars {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin: 5px 0 8px;
+    }
+    .stars-wrap {
+      display: flex;
+      gap: 1px;
+      cursor: pointer;
+    }
+    .star-pos {
+      position: relative;
+      display: inline-block;
+      font-size: 1.18rem;
+      line-height: 1;
+      user-select: none;
+    }
+    .star-bg {
+      color: #ddd;
+      display: block;
+    }
+    .star-fg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      color: #D4AC0D;
+      pointer-events: none;
+      width: 0%;
+      white-space: nowrap;
+    }
+    .stars-wrap:hover .star-pos .star-fg {
+      transition: none;
+    }
+    .avg-score {
+      font-size: 0.8rem;
+      color: #999;
+      font-family: Arial, sans-serif;
+      font-weight: 600;
+      min-width: 2em;
+      line-height: 1;
+    }
   </style>
 </head>
 <body>
@@ -71,7 +104,7 @@
     <div class="card"><img src="https://pandasuika.github.io/img/Me-PorkBelly.jpg" alt="卤肉卤蛋" loading="lazy" decoding="async"><div class="card-body"><h3>卤肉卤蛋</h3><p>王守义卤料版，口味会比较偏淡，但我自己觉得挺好吃的……可能还不够拿得出手。</p></div></div>
     <div class="card"><img src="https://pandasuika.github.io/img/Me-PorkRibs.jpg" alt="红烧排骨" loading="lazy" decoding="async"><div class="card-body"><h3>红烧排骨</h3><p>可能有点费（不粘）锅，只做过一次，但应该还能重现。</p></div></div>
     <div class="card"><img src="https://pandasuika.github.io/img/Me-Prawn.jpg" alt="意大利面" loading="lazy" decoding="async"><div class="card-body"><h3>意大利面</h3><p>一般会放虾或其他冷冻海鲜（带子、蟹棒等），应该没有人会想特意来我这儿吃这个吧哈哈。就给大家看看。</p></div></div>
-    <div class="card"><img src="https://pandasuika.github.io/img/Me-PrawnRice.jpg" alt="炒饭" loading="lazy" decoding="async"><div class="card-body"><h3>炒饭</h3><p>有啥放啥，方便快捷又好吃。小黄炒饭一般饭比菜少。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Me-PrawnRice.jpg" alt="炒饭" loading="lazy" decoding="async"><div class="card-body"><h3>炒饭</h3><p>有啥放問，方便快捷又好吃。小黄炒饭一般饭比菜少。</p></div></div>
     <div class="card"><img src="https://pandasuika.github.io/img/Me-Squid.jpg" alt="炒鱿鱼圈" loading="lazy" decoding="async"><div class="card-body"><h3>炒鱿鱼圈</h3><p>感受一下炒鱿鱼的感觉……这个得看超市有没有卖处理好的鱿鱼圈。</p></div></div>
   </div>
 </div>
@@ -105,113 +138,220 @@
   </div>
 </div>
 
-<!-- Undo / Redo floating buttons -->
-<div class="history-controls">
-  <button class="history-btn" id="undoBtn" onclick="undo()" disabled title="Undo (Ctrl+Z)">&#8617; Undo</button>
-  <button class="history-btn" id="redoBtn" onclick="redo()" disabled title="Redo (Ctrl+Y)">&#8618; Redo</button>
-</div>
+<!-- Firebase SDK (Realtime Database) -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 
 <script>
-  // ── Tab navigation ──────────────────────────────────────────────
+  // ══════════════════════════════════════════════════════════
+  //  FIREBASE SETUP
+  //  1. Go to https://console.firebase.google.com
+  //  2. Create a project → Build → Realtime Database → Create database
+  //  3. In Rules tab, set: { "rules": { ".read": true, ".write": true } }
+  //  4. In Project Settings → Your apps → Web → paste the config below
+  // ══════════════════════════════════════════════════════════
+  const FIREBASE_CONFIG = {
+    apiKey:            "YOUR_API_KEY",
+    authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
+    databaseURL:       "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+    projectId:         "YOUR_PROJECT_ID",
+    storageBucket:     "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId:             "YOUR_APP_ID"
+  };
+
+  var USE_FIREBASE = FIREBASE_CONFIG.apiKey !== "YOUR_API_KEY";
+  var dbRatingsRef = null;
+
+  if (USE_FIREBASE) {
+    firebase.initializeApp(FIREBASE_CONFIG);
+    dbRatingsRef = firebase.database().ref('ratings');
+  }
+
+  // ── Unique user ID (per browser, persisted in localStorage) ──
+  function getUserId() {
+    var uid = localStorage.getItem('kikitchen-uid');
+    if (!uid) {
+      uid = 'u' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('kikitchen-uid', uid);
+    }
+    return uid;
+  }
+  var MY_UID = getUserId();
+
+  // ── Rating state: { dishKey: { uid: 1-5 } } ──
+  var allRatings = {};
+
+  function dishKey(name) {
+    // Replace Firebase-forbidden chars just in case
+    return name.replace(/[.#$\[\]]/g, '_');
+  }
+
+  function getAverage(name) {
+    var r = allRatings[dishKey(name)];
+    if (!r) return 0;
+    var vals = Object.keys(r).map(function(k) { return r[k]; }).filter(function(v) { return v > 0; });
+    return vals.length ? vals.reduce(function(a, b) { return a + b; }, 0) / vals.length : 0;
+  }
+
+  function getRatingCount(name) {
+    var r = allRatings[dishKey(name)];
+    if (!r) return 0;
+    return Object.keys(r).filter(function(k) { return r[k] > 0; }).length;
+  }
+
+  function getMyRating(name) {
+    var r = allRatings[dishKey(name)];
+    return (r && r[MY_UID]) || 0;
+  }
+
+  // ── Render stars for a dish ──
+  // hoverValue = null → show average with partial fills
+  // hoverValue = 1–5  → show hover preview (solid fills)
+  function renderStars(name, hoverValue) {
+    var container = document.querySelector('.card-stars[data-card-id="' + CSS.escape(name) + '"]');
+    if (!container) return;
+
+    var avg   = getAverage(name);
+    var count = getRatingCount(name);
+    var scoreEl = container.querySelector('.avg-score');
+    if (scoreEl) {
+      scoreEl.textContent = count > 0 ? avg.toFixed(1) : '-';
+    }
+
+    container.querySelectorAll('.star-pos').forEach(function(pos) {
+      var v  = parseInt(pos.dataset.value);
+      var fg = pos.querySelector('.star-fg');
+
+      if (hoverValue != null) {
+        // Hover preview: solid up to hoverValue
+        fg.style.width = v <= hoverValue ? '100%' : '0%';
+      } else {
+        // Average display with partial fill
+        if (avg === 0) {
+          fg.style.width = '0%';
+        } else if (v <= Math.floor(avg)) {
+          fg.style.width = '100%';
+        } else if (v === Math.ceil(avg) && (avg % 1) > 0) {
+          fg.style.width = ((avg % 1) * 100).toFixed(1) + '%';
+        } else {
+          fg.style.width = '0%';
+        }
+      }
+    });
+  }
+
+  function handleStarClick(name, value) {
+    var key       = dishKey(name);
+    var myOld     = getMyRating(name);
+    var newRating = (myOld === value) ? 0 : value; // click same star = clear
+
+    if (!allRatings[key]) allRatings[key] = {};
+    if (newRating === 0) {
+      delete allRatings[key][MY_UID];
+    } else {
+      allRatings[key][MY_UID] = newRating;
+    }
+    renderStars(name);
+
+    // Persist
+    if (dbRatingsRef) {
+      var ref = dbRatingsRef.child(key + '/' + MY_UID);
+      newRating === 0 ? ref.remove() : ref.set(newRating);
+    } else {
+      // localStorage fallback (own device only)
+      if (newRating === 0) {
+        localStorage.removeItem('kikitchen-r-' + key);
+      } else {
+        localStorage.setItem('kikitchen-r-' + key, newRating);
+      }
+    }
+  }
+
+  // ── Build star widgets ──
+  document.querySelectorAll('.card').forEach(function(card) {
+    var name = card.querySelector('img').alt;
+
+    // Load own localStorage rating (visible immediately before Firebase loads)
+    var saved = parseInt(localStorage.getItem('kikitchen-r-' + dishKey(name))) || 0;
+    if (saved > 0) {
+      if (!allRatings[dishKey(name)]) allRatings[dishKey(name)] = {};
+      allRatings[dishKey(name)][MY_UID] = saved;
+    }
+
+    var starsDiv = document.createElement('div');
+    starsDiv.className = 'card-stars';
+    starsDiv.dataset.cardId = name;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'stars-wrap';
+
+    for (var i = 1; i <= 5; i++) {
+      var pos = document.createElement('span');
+      pos.className = 'star-pos';
+      pos.dataset.value = i;
+
+      var bg = document.createElement('span');
+      bg.className = 'star-bg';
+      bg.textContent = '\u2605';
+
+      var fg = document.createElement('span');
+      fg.className = 'star-fg';
+      fg.textContent = '\u2605';
+      fg.style.width = '0%';
+
+      pos.appendChild(bg);
+      pos.appendChild(fg);
+      wrap.appendChild(pos);
+    }
+
+    // Hover + click handlers
+    (function(n) {
+      wrap.querySelectorAll('.star-pos').forEach(function(pos) {
+        var v = parseInt(pos.dataset.value);
+        pos.addEventListener('mouseenter', function() { renderStars(n, v); });
+        pos.addEventListener('click',      function() { handleStarClick(n, v); });
+      });
+      wrap.addEventListener('mouseleave', function() { renderStars(n); });
+    })(name);
+
+    var score = document.createElement('span');
+    score.className = 'avg-score';
+    score.textContent = '-';
+
+    starsDiv.appendChild(wrap);
+    starsDiv.appendChild(score);
+
+    var body = card.querySelector('.card-body');
+    body.insertBefore(starsDiv, body.querySelector('p'));
+
+    renderStars(name);
+  });
+
+  // ── Firebase real-time sync ──
+  if (dbRatingsRef) {
+    dbRatingsRef.on('value', function(snap) {
+      var data = snap.val() || {};
+      // Merge into allRatings (keep own local entry if firebase has none yet)
+      Object.keys(data).forEach(function(key) { allRatings[key] = data[key]; });
+      document.querySelectorAll('.card-stars').forEach(function(el) {
+        renderStars(el.dataset.cardId);
+      });
+    });
+  }
+
+  // ── Tab navigation ──
   function openPage(pageName, btn) {
-    document.querySelectorAll('.tabcontent').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.tablink').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tabcontent').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.tablink').forEach(function(el)    { el.classList.remove('active'); });
     document.getElementById(pageName).classList.add('active');
     btn.classList.add('active');
   }
   document.getElementById('defaultOpen').click();
-  const topbar = document.querySelector('.topbar');
-  window.addEventListener('scroll', () => {
+
+  var topbar = document.querySelector('.topbar');
+  window.addEventListener('scroll', function() {
     topbar.classList.toggle('scrolled', window.scrollY > 10);
-  });
-
-  // ── Star rating ─────────────────────────────────────────────────
-  const STORAGE_KEY = 'kikitchen-ratings';
-  const ratings = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-  let undoStack = [];
-  let redoStack = [];
-
-  function saveRatings() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(ratings));
-  }
-
-  function renderStars(cardId, hoverValue) {
-    const container = document.querySelector('.card-stars[data-card-id="' + CSS.escape(cardId) + '"]');
-    if (!container) return;
-    const current = ratings[cardId] || 0;
-    container.querySelectorAll('.star').forEach(function(star) {
-      const v = parseInt(star.dataset.value);
-      star.classList.toggle('filled', hoverValue == null && v <= current);
-      star.classList.toggle('hovered', hoverValue != null && v <= hoverValue);
-    });
-  }
-
-  function handleStarClick(cardId, value) {
-    const oldRating = ratings[cardId] || 0;
-    const newRating = (oldRating === value) ? 0 : value;
-    undoStack.push({ cardId: cardId, from: oldRating, to: newRating });
-    redoStack = [];
-    ratings[cardId] = newRating;
-    saveRatings();
-    renderStars(cardId);
-    updateHistoryButtons();
-  }
-
-  function undo() {
-    if (!undoStack.length) return;
-    const action = undoStack.pop();
-    redoStack.push(action);
-    ratings[action.cardId] = action.from;
-    saveRatings();
-    renderStars(action.cardId);
-    updateHistoryButtons();
-  }
-
-  function redo() {
-    if (!redoStack.length) return;
-    const action = redoStack.pop();
-    undoStack.push(action);
-    ratings[action.cardId] = action.to;
-    saveRatings();
-    renderStars(action.cardId);
-    updateHistoryButtons();
-  }
-
-  function updateHistoryButtons() {
-    document.getElementById('undoBtn').disabled = undoStack.length === 0;
-    document.getElementById('redoBtn').disabled = redoStack.length === 0;
-  }
-
-  // Keyboard shortcuts: Ctrl+Z / Ctrl+Y / Ctrl+Shift+Z
-  document.addEventListener('keydown', function(e) {
-    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 'z') { e.preventDefault(); undo(); }
-    if ((e.ctrlKey || e.metaKey) && e.key === 'y') { e.preventDefault(); redo(); }
-    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'z') { e.preventDefault(); redo(); }
-  });
-
-  // Inject star widgets into every card
-  document.querySelectorAll('.card').forEach(function(card) {
-    const id = card.querySelector('img').alt;
-    const starsDiv = document.createElement('div');
-    starsDiv.className = 'card-stars';
-    starsDiv.dataset.cardId = id;
-
-    for (let i = 1; i <= 5; i++) {
-      const star = document.createElement('span');
-      star.className = 'star';
-      star.dataset.value = i;
-      star.textContent = '\u2605';
-      (function(cardId, val) {
-        star.addEventListener('click', function() { handleStarClick(cardId, val); });
-        star.addEventListener('mouseenter', function() { renderStars(cardId, val); });
-      })(id, i);
-      starsDiv.appendChild(star);
-    }
-    starsDiv.addEventListener('mouseleave', function() { renderStars(id); });
-
-    const cardBody = card.querySelector('.card-body');
-    cardBody.insertBefore(starsDiv, cardBody.querySelector('p'));
-    renderStars(id);
   });
 </script>
 
