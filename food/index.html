@@ -7,159 +7,42 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Papyrus", "STShuTi", "YouYuan", fantasy, serif; background: #fffcf1; color: #424949; }
+    .topbar { position: sticky; top: 0; z-index: 100; }
+    .header { padding: 40px 20px; text-align: center; background: #D4AC0D; color: white; overflow: hidden; transition: padding 0.3s ease; }
+    .header h1 { font-size: clamp(1.9rem, 5.5vw, 2.8rem); letter-spacing: 0.05em; transition: font-size 0.3s ease; }
+    .header p { font-size: clamp(1rem, 2.8vw, 1.15rem); opacity: 0.9; margin-top: 8px; max-height: 3em; overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease; }
+    .topbar.scrolled .header { padding: 8px 20px; }
+    .topbar.scrolled .header h1 { font-size: clamp(1.1rem, 3.2vw, 1.5rem); }
+    .topbar.scrolled .header p { max-height: 0; opacity: 0; margin-top: 0; }
+    .tabs { display: flex; }
+    .tablink { flex: 1; height: 48px; background-color: #8fbc8f; color: #2c3e2d; border: none; outline: none; cursor: pointer; padding: 0 8px; font-size: clamp(0.95rem, 2.8vw, 1.15rem); font-family: "Broadway", "Papyrus", serif; transition: background-color 0.2s, color 0.2s; }
+    .tablink:hover { background-color: #f5deb3; }
+    .tablink.active { background-color: #fffcf1; color: #6b4e00; box-shadow: none; font-weight: bold; }
+    .tabcontent { display: none; background-color: #fffcf1; padding: 24px 16px; min-height: 60vh; }
+    .tabcontent.active { display: block; }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
+    .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 6px 18px rgba(0,0,0,0.13); }
+    .card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+    .card-body { padding: 12px 14px 16px; }
+    .card-body h3 { font-size: 1rem; margin-bottom: 6px; color: #3d3000; }
+    .card-body p { font-size: 0.82rem; line-height: 1.55; color: #5a5a5a; font-family: "STShuTi", "YouYuan", sans-serif; }
 
-    body {
-      font-family: "Papyrus", "STShuTi", "YouYuan", fantasy, serif;
-      background: #fffcf1;
-      color: #424949;
-    }
+    /* Star rating */
+    .card-stars { display: flex; gap: 3px; margin: 5px 0 8px; }
+    .star { cursor: pointer; font-size: 1.15rem; color: #ddd; transition: color 0.12s, transform 0.12s; line-height: 1; user-select: none; }
+    .star.filled { color: #D4AC0D; }
+    .star.hovered { color: #f0c830; transform: scale(1.2); }
 
-    /* Sticky top bar */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    /* Header */
-    .header {
-      padding: 40px 20px;
-      text-align: center;
-      background: #D4AC0D;
-      color: white;
-      overflow: hidden;
-      transition: padding 0.3s ease;
-    }
-
-    .header h1 {
-      font-size: clamp(1.9rem, 5.5vw, 2.8rem);
-      letter-spacing: 0.05em;
-      transition: font-size 0.3s ease;
-    }
-
-    .header p {
-      font-size: clamp(1rem, 2.8vw, 1.15rem);
-      opacity: 0.9;
-      margin-top: 8px;
-      max-height: 3em;
-      overflow: hidden;
-      transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
-    }
-
-    /* Compact state when scrolled */
-    .topbar.scrolled .header {
-      padding: 8px 20px;
-    }
-
-    .topbar.scrolled .header h1 {
-      font-size: clamp(1.1rem, 3.2vw, 1.5rem);
-    }
-
-    .topbar.scrolled .header p {
-      max-height: 0;
-      opacity: 0;
-      margin-top: 0;
-    }
-
-    /* Tabs */
-    .tabs {
-      display: flex;
-    }
-
-    .tablink {
-      flex: 1;
-      height: 48px;
-      background-color: #8fbc8f; /* DarkSeaGreen */
-      color: #2c3e2d;
-      border: none;
-      outline: none;
-      cursor: pointer;
-      padding: 0 8px;
-      font-size: clamp(0.95rem, 2.8vw, 1.15rem);
-      font-family: "Broadway", "Papyrus", serif;
-      transition: background-color 0.2s, color 0.2s;
-    }
-
-    .tablink:hover {
-      background-color: #f5deb3; /* Wheat */
-    }
-
-    .tablink.active {
-      background-color: #fffcf1;
-      color: #6b4e00;
-      box-shadow: none;
-      font-weight: bold;
-    }
-
-    /* Tab content */
-    .tabcontent {
-      display: none;
-      background-color: #fffcf1;
-      padding: 24px 16px;
-      min-height: 60vh;
-    }
-
-    .tabcontent.active {
-      display: block;
-    }
-
-    /* Grid */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (max-width: 480px) {
-      .grid { grid-template-columns: 1fr; }
-    }
-
-    /* Card */
-    .card {
-      background: white;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.13);
-    }
-
-    .card img {
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      object-fit: cover;
-      display: block;
-    }
-
-    .card-body {
-      padding: 12px 14px 16px;
-    }
-
-    .card-body h3 {
-      font-size: 1rem;
-      margin-bottom: 6px;
-      color: #3d3000;
-    }
-
-    .card-body p {
-      font-size: 0.82rem;
-      line-height: 1.55;
-      color: #5a5a5a;
-      font-family: "STShuTi", "YouYuan", sans-serif;
-    }
+    /* Undo / Redo floating controls */
+    .history-controls { position: fixed; bottom: 24px; right: 24px; display: flex; gap: 8px; z-index: 200; }
+    .history-btn { background: #8fbc8f; color: #2c3e2d; border: none; border-radius: 8px; padding: 9px 16px; font-size: 0.85rem; font-family: "Papyrus", serif; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.18); transition: background 0.2s, opacity 0.2s, transform 0.15s; }
+    .history-btn:hover:not(:disabled) { background: #f5deb3; transform: translateY(-2px); }
+    .history-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
   </style>
 </head>
 <body>
@@ -169,148 +52,166 @@
   <h1>KiKiKitchen 黄黄小厨</h1>
   <p>by invitation only &amp; reservation required</p>
 </div>
-
 <div class="tabs">
   <button class="tablink" onclick="openPage('Meat', this)" id="defaultOpen">Meat</button>
   <button class="tablink" onclick="openPage('Veggie', this)">Veggie</button>
   <button class="tablink" onclick="openPage('Savoury', this)">Savoury</button>
   <button class="tablink" onclick="openPage('Sweet', this)">Sweet</button>
 </div>
-</div><!-- end topbar -->
+</div>
 
 <div id="Meat" class="tabcontent">
   <div class="grid">
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Me-CarrotPork.jpg" alt="胡萝卜炒肉" loading="lazy" decoding="async">
-      <div class="card-body"><h3>胡萝卜炒肉</h3><p>胡萝卜片或胡萝卜丝和五花肉片或肉丝一起炒熟，好吃不腻。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Me-MuerPork.jpg" alt="木耳炒肉" loading="lazy" decoding="async">
-      <div class="card-body"><h3>木耳炒肉</h3><p>炒肉系列之二，香辣口味。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Me-TomatoBeef.jpg" alt="番茄牛腩" loading="lazy" decoding="async">
-      <div class="card-body"><h3>番茄牛腩</h3><p>看着很黑暗，其实特别好吃又下饭，偏甜口。电高压锅是个好东西。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Me-BeefSlice.jpg" alt="肥牛汤" loading="lazy" decoding="async">
-      <div class="card-body"><h3>肥牛汤</h3><p>西红柿、金针菇、肥牛片，可酸可辣的汤，也可以换别的配料比如豆腐。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Me-ChickenSoup.jpg" alt="鸡汤" loading="lazy" decoding="async">
-      <div class="card-body"><h3>鸡汤</h3><p>去骨鸡腿肉，配料可自定义。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Me-CornPork.jpg" alt="玉米排骨汤" loading="lazy" decoding="async">
-      <div class="card-body"><h3>玉米排骨汤</h3><p>香甜的玉米，软嫩的排骨，再加上土豆和胡萝卜味道会更好。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Me-PorkBelly.jpg" alt="卤肉卤蛋" loading="lazy" decoding="async">
-      <div class="card-body"><h3>卤肉卤蛋</h3><p>王守义卤料版，口味会比较偏淡，但我自己觉得挺好吃的……可能还不够拿得出手。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Me-PorkRibs.jpg" alt="红烧排骨" loading="lazy" decoding="async">
-      <div class="card-body"><h3>红烧排骨</h3><p>可能有点费（不粘）锅，只做过一次，但应该还能重现。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Me-Prawn.jpg" alt="意大利面" loading="lazy" decoding="async">
-      <div class="card-body"><h3>意大利面</h3><p>一般会放虾或其他冷冻海鲜（带子、蟹棒等），应该没有人会想特意来我这儿吃这个吧哈哈。就给大家看看。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Me-PrawnRice.jpg" alt="炒饭" loading="lazy" decoding="async">
-      <div class="card-body"><h3>炒饭</h3><p>有啥放啥，方便快捷又好吃。小黄炒饭一般饭比菜少。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Me-Squid.jpg" alt="炒鱿鱼圈" loading="lazy" decoding="async">
-      <div class="card-body"><h3>炒鱿鱼圈</h3><p>感受一下炒鱿鱼的感觉……这个得看超市有没有卖处理好的鱿鱼圈。</p></div>
-    </div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Me-CarrotPork.jpg" alt="胡萝卜炒肉" loading="lazy" decoding="async"><div class="card-body"><h3>胡萝卜炒肉</h3><p>胡萝卜片或胡萝卜丝和五花肉片或肉丝一起炒熟，好吃不腻。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Me-MuerPork.jpg" alt="木耳炒肉" loading="lazy" decoding="async"><div class="card-body"><h3>木耳炒肉</h3><p>炒肉系列之二，香辣口味。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Me-TomatoBeef.jpg" alt="番茄牛腩" loading="lazy" decoding="async"><div class="card-body"><h3>番茄牛腩</h3><p>看着很黑暗，其实特别好吃又下饭，偏甜口。电高压锅是个好东西。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Me-BeefSlice.jpg" alt="肥牛汤" loading="lazy" decoding="async"><div class="card-body"><h3>肥牛汤</h3><p>西红柿、金针菇、肥牛片，可酸可辣的汤，也可以换别的配料比如豆腐。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Me-ChickenSoup.jpg" alt="鸡汤" loading="lazy" decoding="async"><div class="card-body"><h3>鸡汤</h3><p>去骨鸡腿肉，配料可自定义。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Me-CornPork.jpg" alt="玉米排骨汤" loading="lazy" decoding="async"><div class="card-body"><h3>玉米排骨汤</h3><p>香甜的玉米，软嫩的排骨，再加上土豆和胡萝卜味道会更好。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Me-PorkBelly.jpg" alt="卤肉卤蛋" loading="lazy" decoding="async"><div class="card-body"><h3>卤肉卤蛋</h3><p>王守义卤料版，口味会比较偏淡，但我自己觉得挺好吃的……可能还不够拿得出手。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Me-PorkRibs.jpg" alt="红烧排骨" loading="lazy" decoding="async"><div class="card-body"><h3>红烧排骨</h3><p>可能有点费（不粘）锅，只做过一次，但应该还能重现。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Me-Prawn.jpg" alt="意大利面" loading="lazy" decoding="async"><div class="card-body"><h3>意大利面</h3><p>一般会放虾或其他冷冻海鲜（带子、蟹棒等），应该没有人会想特意来我这儿吃这个吧哈哈。就给大家看看。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Me-PrawnRice.jpg" alt="炒饭" loading="lazy" decoding="async"><div class="card-body"><h3>炒饭</h3><p>有啥放啥，方便快捷又好吃。小黄炒饭一般饭比菜少。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Me-Squid.jpg" alt="炒鱿鱼圈" loading="lazy" decoding="async"><div class="card-body"><h3>炒鱿鱼圈</h3><p>感受一下炒鱿鱼的感觉……这个得看超市有没有卖处理好的鱿鱼圈。</p></div></div>
   </div>
 </div>
 
 <div id="Veggie" class="tabcontent">
   <div class="grid">
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Ve-Cabbage.jpg" alt="炒白菜" loading="lazy" decoding="async">
-      <div class="card-body"><h3>炒白菜</h3><p>蒜炒白菜，加一点儿火腿肠，再来一点儿剁辣椒，不好吃才怪(～￣▽￣)～。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Ve-Enoki.jpg" alt="烤金针菇" loading="lazy" decoding="async">
-      <div class="card-body"><h3>烤金针菇</h3><p>烤箱也是个好东西。蒜末和小米椒加上一点点油就可以非常美味了。不能吃辣可以减少或者不放小米椒。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Ve-Eggplant.jpg" alt="烤茄子" loading="lazy" decoding="async">
-      <div class="card-body"><h3>烤茄子</h3><p>烤箱还是个好东西。蒜末和小米椒加上一点点油就可以非常美味了。最后补一点青葱，颜色就更丰富了。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Ve-Beancurd.jpg" alt="韭菜香干" loading="lazy" decoding="async">
-      <div class="card-body"><h3>韭菜香干</h3><p>用五花肉炸出猪油，炒香干加韭菜，有那么点儿湘菜的意思。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Ve-Cauliflower.jpg" alt="花菜炒肉" loading="lazy" decoding="async">
-      <div class="card-body"><h3>花菜（炒肉）</h3><p>用五花肉炸出猪油，炒花菜，有那么点儿湘菜的意思。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Ve-TomatoEgg.jpg" alt="西红柿炒蛋" loading="lazy" decoding="async">
-      <div class="card-body"><h3>西红柿炒蛋</h3><p>咸口，不放糖不放番茄酱，甚至可能会放花椒油哈哈。偶尔放虾。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Ve-BrocolliSoup.jpg" alt="西兰花豆腐虾仁汤" loading="lazy" decoding="async">
-      <div class="card-body"><h3>西兰花豆腐虾仁汤</h3><p>西兰花也可以蒜蓉炒或者清水煮了撒点儿黑胡椒。豆腐还有韩式辣豆腐汤。</p></div>
-    </div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Ve-Cabbage.jpg" alt="炒白菜" loading="lazy" decoding="async"><div class="card-body"><h3>炒白菜</h3><p>蒜炒白菜，加一点儿火腿肠，再来一点儿剁辣椒，不好吃才怪(～￣▽￣)～。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Ve-Enoki.jpg" alt="烤金针菇" loading="lazy" decoding="async"><div class="card-body"><h3>烤金针菇</h3><p>烤箱也是个好东西。蒜末和小米椒加上一点点油就可以非常美味了。不能吃辣可以减少或者不放小米椒。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Ve-Eggplant.jpg" alt="烤茄子" loading="lazy" decoding="async"><div class="card-body"><h3>烤茄子</h3><p>烤箱还是个好东西。蒜末和小米椒加上一点点油就可以非常美味了。最后补一点青葱，颜色就更丰富了。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Ve-Beancurd.jpg" alt="韭菜香干" loading="lazy" decoding="async"><div class="card-body"><h3>韭菜香干</h3><p>用五花肉炸出猪油，炒香干加韭菜，有那么点儿湘菜的意思。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Ve-Cauliflower.jpg" alt="花菜炒肉" loading="lazy" decoding="async"><div class="card-body"><h3>花菜（炒肉）</h3><p>用五花肉炸出猪油，炒花菜，有那么点儿湘菜的意思。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Ve-TomatoEgg.jpg" alt="西红柿炒蛋" loading="lazy" decoding="async"><div class="card-body"><h3>西红柿炒蛋</h3><p>咸口，不放糖不放番茄酱，甚至可能会放花椒油哈哈。偶尔放虾。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Ve-BrocolliSoup.jpg" alt="西兰花豆腐虾仁汤" loading="lazy" decoding="async"><div class="card-body"><h3>西兰花豆腐虾仁汤</h3><p>西兰花也可以蒜蓉炒或者清水煮了撒点儿黑胡椒。豆腐还有韩式辣豆腐汤。</p></div></div>
   </div>
 </div>
 
 <div id="Savoury" class="tabcontent">
   <div class="grid">
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Sa-Shaomai.jpg" alt="烧卖" loading="lazy" decoding="async">
-      <div class="card-body"><h3>烧卖</h3><p>湖南风味，香菇、五花肉、糯米为主要馅料，猪油、酱油、胡椒粉也是必不可少的。烧卖皮是从日本超市Meidi-ya买的大饺子皮，蒸后晶莹剔透。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Sa-FlossBread.jpg" alt="肉松面包" loading="lazy" decoding="async">
-      <div class="card-body"><h3>肉松面包</h3><p>小面包烤好后，从中间切开一条缝，挤上蛋黄酱，撒上满满的肉松，好吃的。</p></div>
-    </div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Sa-Shaomai.jpg" alt="烧卖" loading="lazy" decoding="async"><div class="card-body"><h3>烧卖</h3><p>湖南风味，香菇、五花肉、糯米为主要馅料，猪油、酱油、胡椒粉也是必不可少的。烧卖皮是从日本超市Meidi-ya买的大饺子皮，蒸后晶莹剔透。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Sa-FlossBread.jpg" alt="肉松面包" loading="lazy" decoding="async"><div class="card-body"><h3>肉松面包</h3><p>小面包烤好后，从中间切开一条缝，挤上蛋黄酱，撒上满满的肉松，好吃的。</p></div></div>
   </div>
 </div>
 
 <div id="Sweet" class="tabcontent">
   <div class="grid">
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Sw-RedBeanBun.jpg" alt="豆沙面包" loading="lazy" decoding="async">
-      <div class="card-body"><h3>豆沙面包</h3><p>好评如潮！好吃得停不下来！不过每个挺小的，豆沙份量倒是很足。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Sw-Cake.jpg" alt="奶油蛋糕" loading="lazy" decoding="async">
-      <div class="card-body"><h3>奶油蛋糕</h3><p>至今卖相还是很惨烈但是好评不断的奶油夹层蛋糕。有好吃的草莓的时候也许会更好吃。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Sw-CakeRoll.jpg" alt="蛋糕卷" loading="lazy" decoding="async">
-      <div class="card-body"><h3>蛋糕卷</h3><p>其实也是奶油蛋糕。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Sw-Pancake.jpg" alt="松饼" loading="lazy" decoding="async">
-      <div class="card-body"><h3>松饼</h3><p>其实也是奶油蛋糕之二。不过不是用烤箱烤的了，至今没有做成功日式松软的松饼，不过也还好吃。</p></div>
-    </div>
-    <div class="card">
-      <img src="https://pandasuika.github.io/img/Sw-Tianjiu.jpg" alt="酒酿小圆子" loading="lazy" decoding="async">
-      <div class="card-body"><h3>酒酿小圆子</h3><p>还可以做成甜酒冲蛋。</p></div>
-    </div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Sw-RedBeanBun.jpg" alt="豆沙面包" loading="lazy" decoding="async"><div class="card-body"><h3>豆沙面包</h3><p>好评如潮！好吃得停不下来！不过每个挺小的，豆沙份量倒是很足。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Sw-Cake.jpg" alt="奶油蛋糕" loading="lazy" decoding="async"><div class="card-body"><h3>奶油蛋糕</h3><p>至今卖相还是很惨烈但是好评不断的奶油夹层蛋糕。有好吃的草莓的时候也许会更好吃。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Sw-CakeRoll.jpg" alt="蛋糕卷" loading="lazy" decoding="async"><div class="card-body"><h3>蛋糕卷</h3><p>其实也是奶油蛋糕。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Sw-Pancake.jpg" alt="松饼" loading="lazy" decoding="async"><div class="card-body"><h3>松饼</h3><p>其实也是奶油蛋糕之二。不过不是用烤箱烤的了，至今没有做成功日式松软的松饼，不过也还好吃。</p></div></div>
+    <div class="card"><img src="https://pandasuika.github.io/img/Sw-Tianjiu.jpg" alt="酒酿小圆子" loading="lazy" decoding="async"><div class="card-body"><h3>酒酿小圆子</h3><p>还可以做成甜酒冲蛋。</p></div></div>
   </div>
 </div>
 
+<!-- Undo / Redo floating buttons -->
+<div class="history-controls">
+  <button class="history-btn" id="undoBtn" onclick="undo()" disabled title="Undo (Ctrl+Z)">&#8617; Undo</button>
+  <button class="history-btn" id="redoBtn" onclick="redo()" disabled title="Redo (Ctrl+Y)">&#8618; Redo</button>
+</div>
+
 <script>
+  // ── Tab navigation ──────────────────────────────────────────────
   function openPage(pageName, btn) {
     document.querySelectorAll('.tabcontent').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.tablink').forEach(el => el.classList.remove('active'));
     document.getElementById(pageName).classList.add('active');
     btn.classList.add('active');
   }
-
   document.getElementById('defaultOpen').click();
-
   const topbar = document.querySelector('.topbar');
   window.addEventListener('scroll', () => {
     topbar.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // ── Star rating ─────────────────────────────────────────────────
+  const STORAGE_KEY = 'kikitchen-ratings';
+  const ratings = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  let undoStack = [];
+  let redoStack = [];
+
+  function saveRatings() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(ratings));
+  }
+
+  function renderStars(cardId, hoverValue) {
+    const container = document.querySelector('.card-stars[data-card-id="' + CSS.escape(cardId) + '"]');
+    if (!container) return;
+    const current = ratings[cardId] || 0;
+    container.querySelectorAll('.star').forEach(function(star) {
+      const v = parseInt(star.dataset.value);
+      star.classList.toggle('filled', hoverValue == null && v <= current);
+      star.classList.toggle('hovered', hoverValue != null && v <= hoverValue);
+    });
+  }
+
+  function handleStarClick(cardId, value) {
+    const oldRating = ratings[cardId] || 0;
+    const newRating = (oldRating === value) ? 0 : value;
+    undoStack.push({ cardId: cardId, from: oldRating, to: newRating });
+    redoStack = [];
+    ratings[cardId] = newRating;
+    saveRatings();
+    renderStars(cardId);
+    updateHistoryButtons();
+  }
+
+  function undo() {
+    if (!undoStack.length) return;
+    const action = undoStack.pop();
+    redoStack.push(action);
+    ratings[action.cardId] = action.from;
+    saveRatings();
+    renderStars(action.cardId);
+    updateHistoryButtons();
+  }
+
+  function redo() {
+    if (!redoStack.length) return;
+    const action = redoStack.pop();
+    undoStack.push(action);
+    ratings[action.cardId] = action.to;
+    saveRatings();
+    renderStars(action.cardId);
+    updateHistoryButtons();
+  }
+
+  function updateHistoryButtons() {
+    document.getElementById('undoBtn').disabled = undoStack.length === 0;
+    document.getElementById('redoBtn').disabled = redoStack.length === 0;
+  }
+
+  // Keyboard shortcuts: Ctrl+Z / Ctrl+Y / Ctrl+Shift+Z
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 'z') { e.preventDefault(); undo(); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'y') { e.preventDefault(); redo(); }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'z') { e.preventDefault(); redo(); }
+  });
+
+  // Inject star widgets into every card
+  document.querySelectorAll('.card').forEach(function(card) {
+    const id = card.querySelector('img').alt;
+    const starsDiv = document.createElement('div');
+    starsDiv.className = 'card-stars';
+    starsDiv.dataset.cardId = id;
+
+    for (let i = 1; i <= 5; i++) {
+      const star = document.createElement('span');
+      star.className = 'star';
+      star.dataset.value = i;
+      star.textContent = '\u2605';
+      (function(cardId, val) {
+        star.addEventListener('click', function() { handleStarClick(cardId, val); });
+        star.addEventListener('mouseenter', function() { renderStars(cardId, val); });
+      })(id, i);
+      starsDiv.appendChild(star);
+    }
+    starsDiv.addEventListener('mouseleave', function() { renderStars(id); });
+
+    const cardBody = card.querySelector('.card-body');
+    cardBody.insertBefore(starsDiv, cardBody.querySelector('p'));
+    renderStars(id);
   });
 </script>
 
